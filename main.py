@@ -15,3 +15,9 @@ print(df.head())
 # description of the data
 print("The statistical description of the data is as follows :")
 print(df.describe())
+
+# get the mean, median and mode
+mean = df['Peak Current'].mean()
+median = df['Peak Current'].median()
+mode = df['Peak Current'].mode()
+print(f'The mean is = {mean}, the median is = {median} and the mode is = {mode}.')
