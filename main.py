@@ -6,6 +6,30 @@ import seaborn as sns
 from statistics import median
 from fitter import Fitter, get_distributions
 
+
+def plot_hist(data: list, bins: int, title: str) -> None:
+    plt.hist(data, color="blue", bins=bins)
+    plt.xlabel(f"Magnitude of {title} the peak current")
+    plt.ylabel("Frequency of peak currents")
+    plt.title(f"Magnitude of {title}peak current distribution")
+    plt.grid(True)
+    plt.savefig(f"Magnitude_{title}_peak_current.png")
+    plt.close()
+
+
+def bestDistributions(data: list, title: str) -> None:
+    choosen_distributions = ["lognorm", "exponnorm", "weibull_max", "gamma", "alpha"]
+    fitter = Fitter(
+        data,
+        distributions=choosen_distributions,
+        timeout=10000,
+    )
+    fitter.fit()
+    print(f"The top 5 distributions for the {title} peak currents are given below : \n")
+    print(fitter.summary())
+    print("\n")
+
+
 # read in the dataset
 df = pd.read_csv("../Lightning_Strokes_JHB_20km.csv")
 
@@ -34,65 +58,24 @@ print(
 print("\n")
 
 # view how the peak current is distributed
-plt.hist(df["Peak Current Magnitude"], color="blue", bins=500)
-plt.xlabel("Magnitude of the peak current")
-plt.ylabel("No of peak currents")
-plt.title("Magnitude peak current distribution")
-plt.grid(True)
-plt.savefig("Magnitude_peak_current.png")
-plt.close()
+plot_hist(df["Peak Current Magnitude"], 500, "")
 
 # distribution for positive values
 positive_currents = df[df["Peak Current"] > 0]
-plt.hist(positive_currents["Peak Current"], color="blue", bins=100)
-plt.xlabel("Magnitude of the positive peak current")
-plt.ylabel("No of peak currents")
-plt.title("Magnitude of positive peak current distribution")
-plt.grid(True)
-plt.savefig("Magnitude_peak_current_positive_currents.png")
-plt.close()
+plot_hist(positive_currents["Peak Current Magnitude"], 100, "Positive")
 
 # distribution for positive values
 negative_currents = df[df["Peak Current"] < 0]
-plt.hist(abs(negative_currents["Peak Current"]), color="blue", bins=100)
-plt.xlabel("Magnitude of the negative peak current")
-plt.ylabel("No of peak currents")
-plt.title("Magnitude of negative peak current distribution")
-plt.grid(True)
-plt.savefig("Magnitude_peak_current_negative_currents.png")
-plt.close()
-
+plot_hist(abs(negative_currents["Peak Current Magnitude"]), 100, "Negative")
 
 # fitting distributions
-choosen_distributions = ["lognorm", "exponnorm", "weibull_max", "gamma", "alpha"]
 magnitude_peak_currents = df["Peak Current Magnitude"]
-fitter = Fitter(
-    magnitude_peak_currents, distributions=choosen_distributions, timeout=10000
-)
-fitter.fit()
-print("The top 5 distributions are given below : \n")
-print(fitter.summary())
-print("\n")
+bestDistributions(magnitude_peak_currents, "Magnitude")
 
 # difference in distributions between the positive and negative
-# for the positive distribution
-fitter = Fitter(
-    positive_currents["Peak Current"],
-    distributions=choosen_distributions,
-    timeout=10000,
-)
-fitter.fit()
-print("The top 5 distributions for the positive peak currents are given below : \n")
-print(fitter.summary())
-print("\n")
 
 # for the positive distribution
-fitter = Fitter(
-    abs(negative_currents["Peak Current"]),
-    distributions=choosen_distributions,
-    timeout=10000,
-)
-fitter.fit()
-print("The top 5 distributions for the negative peak currents are given below : \n")
-print(fitter.summary())
-print("\n")
+bestDistributions(positive_currents["Peak Current"], "Magnitude")
+
+# for the negative distribution
+bestDistributions(abs(negative_currents["Peak Current"]), "Magnitude")
