@@ -8,6 +8,9 @@ from statistics import median
 # read in the dataset
 df = pd.read_csv('Lightning_Strokes_JHB_20km.csv')
 
+# transform the peak currents to their magnitudes
+df['Peak Current Magnitude'] = abs(df['Peak Current'])
+
 # view the data in the dataset
 print('The dataset containts the following \n')
 print(df.head())
