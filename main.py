@@ -36,21 +36,24 @@ plt.ylabel('No of peak currents')
 plt.title('Magnitude peak current distribution')
 plt.grid(True)
 plt.savefig('Magnitude_peak_current.png')
+plt.close()
 
 # distribution for positive values
 positive_currents = df[ df['Peak Current'] > 0 ]
-plt.hist(positive_currents['Peak Current'], color='blue',bins=500)
+plt.hist(positive_currents['Peak Current'], color='blue',bins=100)
 plt.xlabel('Magnitude of the positive peak current')
 plt.ylabel('No of peak currents')
 plt.title('Magnitude of positive peak current distribution')
 plt.grid(True)
 plt.savefig('Magnitude_peak_current_positive_currents.png')
+plt.close()
 
 # distribution for positive values
 negative_currents = df[ df['Peak Current'] < 0 ]
-plt.hist(abs(negative_currents['Peak Current']), color='blue',bins=500)
+plt.hist(abs(negative_currents['Peak Current']), color='blue',bins=100)
 plt.xlabel('Magnitude of the negative peak current')
 plt.ylabel('No of peak currents')
 plt.title('Magnitude of negative peak current distribution')
 plt.grid(True)
 plt.savefig('Magnitude_peak_current_negative_currents.png')
+plt.close()
