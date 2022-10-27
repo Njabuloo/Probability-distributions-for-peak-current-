@@ -59,9 +59,11 @@ plt.grid(True)
 plt.savefig('Magnitude_peak_current_negative_currents.png')
 plt.close()
 
+choosen_distributions = []
+
 # fitting distributions
 magnitude_peak_currents = df['Peak Current Magnitude']
-fitter = Fitter(magnitude_peak_currents)
+fitter = Fitter(magnitude_peak_currents, choosen_distributions)
 fitter.fit()
 print('The top 5 distributions are given below : \n')
 print(fitter.summary())
