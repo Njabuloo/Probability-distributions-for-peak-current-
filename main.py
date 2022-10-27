@@ -15,6 +15,7 @@ df["Peak Current Magnitude"] = abs(df["Peak Current"])
 # view the data in the dataset
 print("The dataset containts the following \n")
 print(df.head())
+print("\n")
 
 # description of the data
 print("The statistical description of the data is as follows :")
@@ -75,14 +76,22 @@ print("\n")
 
 # difference in distributions between the positive and negative
 # for the positive distribution
-fitter = Fitter(positive_currents, distributions=choosen_distributions, timeout=10000)
+fitter = Fitter(
+    positive_currents["Peak Current"],
+    distributions=choosen_distributions,
+    timeout=10000,
+)
 fitter.fit()
 print("The top 5 distributions for the positive peak currents are given below : \n")
 print(fitter.summary())
 print("\n")
 
 # for the positive distribution
-fitter = Fitter(negative_currents, distributions=choosen_distributions, timeout=10000)
+fitter = Fitter(
+    abs(negative_currents["Peak Current"]),
+    distributions=choosen_distributions,
+    timeout=10000,
+)
 fitter.fit()
 print("The top 5 distributions for the negative peak currents are given below : \n")
 print(fitter.summary())
