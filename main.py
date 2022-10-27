@@ -71,5 +71,19 @@ fitter = Fitter(
 fitter.fit()
 print("The top 5 distributions are given below : \n")
 print(fitter.summary())
+print("\n")
 
 # difference in distributions between the positive and negative
+# for the positive distribution
+fitter = Fitter(positive_currents, distributions=choosen_distributions, timeout=10000)
+fitter.fit()
+print("The top 5 distributions for the positive peak currents are given below : \n")
+print(fitter.summary())
+print("\n")
+
+# for the positive distribution
+fitter = Fitter(negative_currents, distributions=choosen_distributions, timeout=10000)
+fitter.fit()
+print("The top 5 distributions for the negative peak currents are given below : \n")
+print(fitter.summary())
+print("\n")
