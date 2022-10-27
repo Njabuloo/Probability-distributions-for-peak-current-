@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from statistics import median
+from fitter import Fitter, get_distributions
 
 # read in the dataset
 df = pd.read_csv('../Lightning_Strokes_JHB_20km.csv')
@@ -57,3 +58,10 @@ plt.title('Magnitude of negative peak current distribution')
 plt.grid(True)
 plt.savefig('Magnitude_peak_current_negative_currents.png')
 plt.close()
+
+# fitting distributions
+magnitude_peak_currents = df['Peak Current Magnitude']
+fitter = Fitter(magnitude_peak_currents)
+fitter.fit()
+print('The top 5 distributions are given below : \n')
+print(fitter.summary())
