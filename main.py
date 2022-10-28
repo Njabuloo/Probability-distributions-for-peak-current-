@@ -9,16 +9,15 @@ from fitter import Fitter, get_distributions
 
 def plot_hist(data: list, bins: int, title: str) -> None:
     plt.hist(data, color="blue", bins=bins)
-    plt.xlabel(f"Magnitude of {title} the peak current")
+    plt.xlabel(f"{title} peak current (KA)")
     plt.ylabel("Frequency of peak currents")
-    plt.title(f"Magnitude of {title}peak current distribution")
+    plt.title(f"{title} peak current distribution")
     plt.grid(True)
-    plt.savefig(f"Magnitude_{title}_peak_current.png")
+    plt.savefig(f"{title}_peak_current.png")
     plt.close()
 
 
-def bestDistributions(data: list, title: str) -> None:
-    choosen_distributions = ["lognorm", "exponnorm", "weibull_max", "gamma", "alpha"]
+def bestDistributions(data: list, title: str, choosen_distributions: list) -> None:
     fitter = Fitter(
         data,
         distributions=choosen_distributions,
@@ -31,10 +30,7 @@ def bestDistributions(data: list, title: str) -> None:
 
 
 # read in the dataset
-df = pd.read_csv("../Lightning_Strokes_JHB_20km.csv")
-
-# transform the peak currents to their magnitudes
-df["Peak Current Magnitude"] = abs(df["Peak Current"])
+df = pd.read_csv("Lightning_Strokes_JHB_20km.csv")
 
 # view the data in the dataset
 print("The dataset containts the following \n")
@@ -47,35 +43,39 @@ print(df.describe())
 print("\n")
 
 # get the mean, median and mode
-mean = df["Peak Current Magnitude"].mean()
-median = df["Peak Current Magnitude"].median()
-mode = df["Peak Current Magnitude"].mode()
-sd = df["Peak Current Magnitude"].std()
-variance = df["Peak Current Magnitude"].var()
+mean = df["Peak Current"].mean()
+median = df["Peak Current"].median()
+mode = df["Peak Current"].mode()
+sd = df["Peak Current"].std()
+variance = df["Peak Current"].var()
 print(
     f"The mean is = {mean}, the median is = {median}, the mode is = {mode} and the variance is {variance}."
 )
 print("\n")
 
 # view how the peak current is distributed
-plot_hist(df["Peak Current Magnitude"], 500, "")
+plot_hist(df["Peak Current"], 1000, "")
 
 # distribution for positive values
 positive_currents = df[df["Peak Current"] > 0]
-plot_hist(positive_currents["Peak Current Magnitude"], 100, "Positive")
+plot_hist(positive_currents["Peak Current"], 100, "Positive")
 
 # distribution for positive values
 negative_currents = df[df["Peak Current"] < 0]
-plot_hist(abs(negative_currents["Peak Current Magnitude"]), 100, "Negative")
+plot_hist(abs(negative_currents["Peak Current"]), 100, "Negative")
 
 # fitting distributions
-magnitude_peak_currents = df["Peak Current Magnitude"]
-bestDistributions(magnitude_peak_currents, "Magnitude")
+peak_currents = df["Peak Current"]
+choosen_distributions = ["norm", "cauchy", "logistic"]
+bestDistributions(peak_currents, "", choosen_distributions)
 
 # difference in distributions between the positive and negative
+choosen_distributions = ["lognorm", "exponnorm", "weibull_max", "gamma", "alpha"]
 
 # for the positive distribution
-bestDistributions(positive_currents["Peak Current"], "Magnitude")
+bestDistributions(positive_currents["Peak Current"], "Magnitude", choosen_distributions)
 
 # for the negative distribution
-bestDistributions(abs(negative_currents["Peak Current"]), "Magnitude")
+bestDistributions(
+    abs(negative_currents["Peak Current"]), "negative", choosen_distributions
+)
