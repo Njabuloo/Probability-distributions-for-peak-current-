@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import scipy.stats as ss
 from statistics import median
 from fitter import Fitter, get_distributions
 
@@ -79,3 +80,6 @@ bestDistributions(positive_currents["Peak Current"], "Magnitude", choosen_distri
 bestDistributions(
     abs(negative_currents["Peak Current"]), "negative", choosen_distributions
 )
+
+# plotting the CDFs
+sorted_peak_currents = np.sort(peak_currents)
