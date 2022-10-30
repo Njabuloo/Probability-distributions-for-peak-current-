@@ -80,6 +80,23 @@ bestDistributions(positive_currents["Peak Current"], "Magnitude", choosen_distri
 bestDistributions(
     abs(negative_currents["Peak Current"]), "negative", choosen_distributions
 )
+plt.close()
 
 # plotting the CDFs
 sorted_peak_currents = np.sort(peak_currents)
+normal_distribution_cdf = ss.norm.cdf(sorted_peak_currents)
+cauchy_distribution_cdf = ss.cauchy.cdf(sorted_peak_currents)
+logistic_distribution_cdf = ss.logistic.cdf(sorted_peak_currents)
+data_points = len(sorted_peak_currents)
+sorted_peak_currents_cdf = np.arange(data_points) / float(data_points)
+plt.plot(sorted_peak_currents, sorted_peak_currents_cdf, label="Peak current")
+plt.plot(sorted_peak_currents, normal_distribution_cdf, label="normal")
+plt.plot(sorted_peak_currents, cauchy_distribution_cdf, label="cauchy")
+plt.plot(sorted_peak_currents, logistic_distribution_cdf, label="logistic")
+plt.grid(True)
+plt.xlabel("Peak current (KA)")
+plt.ylabel("Probability")
+plt.title("Emphirical vs Theoretical CDFs plot")
+plt.legend()
+plt.savefig("CDFs.png")
+plt.close()
