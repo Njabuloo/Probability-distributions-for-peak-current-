@@ -2,6 +2,8 @@
 
 Implementation to find the best probability distribution for peak currents from lightnings.
 
+For my Probabilistic systems and signals course project.
+
 ## How to run
 
 ```
